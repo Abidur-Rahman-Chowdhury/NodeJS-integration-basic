@@ -58,7 +58,18 @@ const users = [
 ];
 // get method
 app.get('/users', (req, res) => {
-  res.send(users);
+  // search with query
+  // console.log( 'query',req.query);
+
+  if (req.query.name) {
+    const search = req.query.name.toLowerCase();
+    const matched = users.filter(user => user.name.toLowerCase().includes(search))
+    res.send(matched)
+  } 
+  else {
+    
+    res.send(users);
+  }
 });
 app.get('/fruits', (req, res) => {
   res.send(['mango','apple','banana','oranges'])
@@ -75,7 +86,10 @@ app.get('/user/:id', (req, res) => {
 // post method 
 app.post('/user', (req, res) => {
   console.log('request', req.body);
-  res.send('post method success');
+  const user = req.body;
+  user.id = users.length + 1;
+  users.push(user);
+  res.send(user);
 })
 app.listen(port, () => {
   console.log('listening port', port);
